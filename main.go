@@ -50,8 +50,7 @@ func CreateDir(dirName string) {
 
 func SaveFile(url string, savePath string) (httpStatusCode int) {
 	method := "GET"
-	client := &http.Client{
-	}
+	client := &http.Client{}
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -147,7 +146,7 @@ func saveAlbum(girlInfo GirlInfo) {
 type GirlInfo struct {
 	Uid          string
 	Title        string
-	FristPageUrl string
+	FirstPageUrl string
 }
 
 func getGirlList(url string) {
@@ -160,7 +159,7 @@ func getGirlList(url string) {
 			girlList[k] = GirlInfo{
 				Uid:          v[1],
 				Title:        v[2],
-				FristPageUrl: girlUrl + v[1],
+				FirstPageUrl: girlUrl + v[1],
 			}
 		}
 	}
