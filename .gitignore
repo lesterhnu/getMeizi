@@ -3,3 +3,4 @@
 meizi/*
 !meizi/.gitkeep
 *.exe
+.DS_Store
