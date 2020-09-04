@@ -1,0 +1,5 @@
+.idea/
+
+meizi/*
+!meizi/.gitkeep
+*.exe
