@@ -44,7 +44,7 @@ var imgPattern = regexp.MustCompile(`<img class="blur" src="(.*?\.jpg)`)
 
 //创建文件夹
 func CreateDir(dirName string) {
-	_ = os.Mkdir(dirName, 0755)
+	_ = os.MkdirAll(dirName, 0755)
 }
 
 func SaveFile(url string, savePath string) (httpStatusCode int) {
