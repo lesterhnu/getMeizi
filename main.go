@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"os"
 	"regexp"
-	"sync"
 	"time"
 )
 
@@ -21,7 +20,6 @@ func main() {
 	for i := 1; i <= pageNumber; i++ {
 		getGirlList(fmt.Sprintf("%s/%d", baseUrl, i))
 	}
-	wg.Wait()
 }
 
 const (
@@ -29,7 +27,9 @@ const (
 	albumUrl   = "https://www.mzitu.com"
 	girlUrl    = "https://www.mzitu.com/"
 	saveDir    = "./meizi/"
+	//绕过防盗链
 	referer    = "https://www.mzitu.com/208319/34"
+	//抓取的页数
 	pageNumber = 1
 	userAgent  = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36"
 	cookie     = "Hm_lvt_cb7f29be3c304cd3bb0c65a4faa96c30=1599050899; Hm_lpvt_cb7f29be3c304cd3bb0c65a4faa96c30=1599235057"
@@ -41,7 +41,6 @@ var uidPattern = regexp.MustCompile(`<li><a href="https://www.mzitu.com/(\d{6}).
 // 获取 主图片地址 正则
 var imgPattern = regexp.MustCompile(`<img class="blur" src="(.*?\.jpg)`)
 
-var wg sync.WaitGroup
 
 //创建文件夹
 func CreateDir(dirName string) {
@@ -131,7 +130,6 @@ func saveAlbum(girlInfo GirlInfo) {
 		imgUrl := fmt.Sprintf("%s%02d.jpg", albumBaseUrl, i)
 		httpStatusCode := SaveFile(imgUrl, albumDir)
 		if httpStatusCode == 404 {
-			wg.Done()
 			break
 		} else if httpStatusCode == 200 {
 			i++
@@ -165,7 +163,6 @@ func getGirlList(url string) {
 	}
 	//开协程保存相册
 	for _, v := range girlList {
-		wg.Add(1)
-		go saveAlbum(v)
+		saveAlbum(v)
 	}
 }
